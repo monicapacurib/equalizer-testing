@@ -38,7 +38,7 @@ if uploaded_file is not None:
     st.markdown("---")
     st.subheader("🎛️ Graphic Equalizer")
 
-    # Use columns to align sliders horizontally (but sliders are horizontal)
+    # Sliders grouped in columns for layout
     col1, col2, col3 = st.columns(3)
     with col1:
         st.markdown("**Bass**<br><sub>60–250 Hz</sub>", unsafe_allow_html=True)
@@ -70,11 +70,3 @@ if uploaded_file is not None:
     ax.set_title("Processed Audio Waveform")
     st.pyplot(fig)
 
-    # Optional: mimic preset panel (static)
-    with st.sidebar:
-        st.markdown("## 🎚️ Preset Menu")
-        st.text_input("Name:")
-        st.button("Save current settings to preset")
-        st.markdown("### Presets")
-        st.write("• Audio Technica ATH-M50x\n• Monoprice Quarts\n• Sony MDR-EX1000")
-        st.button("Load selected preset")
