@@ -26,8 +26,7 @@ def apply_equalizer(data, fs, gains):
     return processed
 
 # --- Streamlit UI ---
-st.set_page_config(layout="wide")
-st.title("🎚️ Digital Music Equalizer")
+st.title("🎧 Digital Music Equalizer")
 
 uploaded_file = st.file_uploader("Upload audio file (WAV)", type=["wav"])
 
@@ -35,22 +34,10 @@ if uploaded_file is not None:
     data, fs = load_audio(uploaded_file)
     st.audio(uploaded_file)
 
-    st.markdown("---")
-    st.subheader("🎛️ Graphic Equalizer")
-
-    # Sliders grouped in columns for layout
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.markdown("**Bass**<br><sub>60–250 Hz</sub>", unsafe_allow_html=True)
-        bass = st.slider("Bass Gain", 0.0, 2.0, 1.0, 0.1, key="bass")
-
-    with col2:
-        st.markdown("**Midrange**<br><sub>250–4k Hz</sub>", unsafe_allow_html=True)
-        mid = st.slider("Mid Gain", 0.0, 2.0, 1.0, 0.1, key="mid")
-
-    with col3:
-        st.markdown("**Treble**<br><sub>4k–10k Hz</sub>", unsafe_allow_html=True)
-        treble = st.slider("Treble Gain", 0.0, 2.0, 1.0, 0.1, key="treble")
+    st.subheader("🎚️ Adjust Frequency Bands")
+    bass = st.slider("Bass (60–250 Hz)", 0.0, 2.0, 1.0, 0.1)
+    mid = st.slider("Midrange (250 Hz – 4 kHz)", 0.0, 2.0, 1.0, 0.1)
+    treble = st.slider("Treble (4–10 kHz)", 0.0, 2.0, 1.0, 0.1)
 
     output = apply_equalizer(data, fs, [bass, mid, treble])
 
@@ -58,15 +45,26 @@ if uploaded_file is not None:
     buf = io.BytesIO()
     sf.write(buf, output, fs, format='WAV')
     st.audio(buf, format='audio/wav')
-    st.download_button("🎵 Download Processed Audio", buf.getvalue(), file_name="equalized_output.wav")
+    st.download_button("Download Processed Audio", buf.getvalue(), file_name="equalized_output.wav")
 
+    # --- Stylized waveform visualization ---
     st.markdown("---")
     st.subheader("📈 Processed Audio Waveform")
-    fig, ax = plt.subplots(figsize=(10, 3))
-    time = np.linspace(0, len(output) / fs, num=len(output))
-    ax.plot(time, output, linewidth=0.5)
-    ax.set_xlabel("Time [s]")
-    ax.set_ylabel("Amplitude")
-    ax.set_title("Processed Audio Waveform")
-    st.pyplot(fig)
 
+    plt.style.use("seaborn-v0_8-darkgrid")  # Optional style
+
+    fig, ax = plt.subplots(figsize=(10, 4))
+    time = np.linspace(0, len(output) / fs, num=len(output))
+    
+    ax.plot(time, output, color="#00C6A9", linewidth=1.0, linestyle="-")
+    ax.set_facecolor("#111111")
+    fig.patch.set_facecolor("#111111")
+    
+    ax.set_xlabel("Time [s]", fontsize=12, color="white")
+    ax.set_ylabel("Amplitude", fontsize=12, color="white")
+    ax.set_title("🎵 Stylized Audio Waveform", fontsize=14, color="white")
+
+    ax.tick_params(colors='white')
+    ax.grid(True, linestyle='--', alpha=0.4)
+
+    st.pyplot(fig)
