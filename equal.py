@@ -34,7 +34,7 @@ if uploaded_file is not None:
     data, fs = load_audio(uploaded_file)
     st.audio(uploaded_file)
 
-    st.subheader("🎚️ Adjust Frequency Bands")
+    st.subheader("Adjust Frequency Bands")
     bass = st.slider("Bass (60–250 Hz)", 0.0, 2.0, 1.0, 0.1)
     mid = st.slider("Midrange (250 Hz – 4 kHz)", 0.0, 2.0, 1.0, 0.1)
     treble = st.slider("Treble (4–10 kHz)", 0.0, 2.0, 1.0, 0.1)
@@ -47,24 +47,28 @@ if uploaded_file is not None:
     st.audio(buf, format='audio/wav')
     st.download_button("Download Processed Audio", buf.getvalue(), file_name="equalized_output.wav")
 
-    # --- Stylized waveform visualization ---
+    # --- Stylized waveform visualization with black background and waveform ---
     st.markdown("---")
     st.subheader("📈 Processed Audio Waveform")
 
-    plt.style.use("seaborn-v0_8-darkgrid")  # Optional style
-
     fig, ax = plt.subplots(figsize=(10, 4))
+
     time = np.linspace(0, len(output) / fs, num=len(output))
-    
-    ax.plot(time, output, color="#00C6A9", linewidth=1.0, linestyle="-")
-    ax.set_facecolor("#111111")
-    fig.patch.set_facecolor("#111111")
-    
+
+    # Plot waveform in black
+    ax.plot(time, output, color="black", linewidth=1.0)
+
+    # Set black background
+    ax.set_facecolor("black")
+    fig.patch.set_facecolor("black")
+
+    # Set axis labels and title in white
     ax.set_xlabel("Time [s]", fontsize=12, color="white")
     ax.set_ylabel("Amplitude", fontsize=12, color="white")
     ax.set_title("🎵 Stylized Audio Waveform", fontsize=14, color="white")
 
-    ax.tick_params(colors='white')
-    ax.grid(True, linestyle='--', alpha=0.4)
+    # Set ticks and grid
+    ax.tick_params(colors="white")
+    ax.grid(True, linestyle="--", color="gray", alpha=0.3)
 
     st.pyplot(fig)
