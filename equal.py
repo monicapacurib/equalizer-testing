@@ -38,22 +38,19 @@ if uploaded_file is not None:
     st.markdown("---")
     st.subheader("🎛️ Graphic Equalizer")
 
-    # Vertical sliders in horizontal layout (like image)
+    # Use columns to align sliders horizontally (but sliders are horizontal)
     col1, col2, col3 = st.columns(3)
     with col1:
         st.markdown("**Bass**<br><sub>60–250 Hz</sub>", unsafe_allow_html=True)
-        bass = st.slider("", 0.0, 2.0, 1.0, 0.1, key="bass", orientation="vertical")
-        st.write(f"Gain: {bass:.1f}x")
+        bass = st.slider("Bass Gain", 0.0, 2.0, 1.0, 0.1, key="bass")
 
     with col2:
-        st.markdown("**Midrange**<br><sub>250–4000 Hz</sub>", unsafe_allow_html=True)
-        mid = st.slider("", 0.0, 2.0, 1.0, 0.1, key="mid", orientation="vertical")
-        st.write(f"Gain: {mid:.1f}x")
+        st.markdown("**Midrange**<br><sub>250–4k Hz</sub>", unsafe_allow_html=True)
+        mid = st.slider("Mid Gain", 0.0, 2.0, 1.0, 0.1, key="mid")
 
     with col3:
         st.markdown("**Treble**<br><sub>4k–10k Hz</sub>", unsafe_allow_html=True)
-        treble = st.slider("", 0.0, 2.0, 1.0, 0.1, key="treble", orientation="vertical")
-        st.write(f"Gain: {treble:.1f}x")
+        treble = st.slider("Treble Gain", 0.0, 2.0, 1.0, 0.1, key="treble")
 
     output = apply_equalizer(data, fs, [bass, mid, treble])
 
@@ -73,7 +70,7 @@ if uploaded_file is not None:
     ax.set_title("Processed Audio Waveform")
     st.pyplot(fig)
 
-    # Optional: mimic preset panel (static, for layout only)
+    # Optional: mimic preset panel (static)
     with st.sidebar:
         st.markdown("## 🎚️ Preset Menu")
         st.text_input("Name:")
