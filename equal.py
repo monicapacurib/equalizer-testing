@@ -48,35 +48,34 @@ if uploaded_file is not None:
     st.audio(buf, format='audio/wav')
     st.download_button("Download Processed Audio", buf.getvalue(), file_name="equalized_output.wav")
 
-    # --- Stylized waveform visualization with white waveform and styled text ---
+    # --- Waveform visualization with white background and black waveform ---
     st.markdown("---")
     st.subheader("📈 Waveform Visualization")
 
     fig, ax = plt.subplots(figsize=(10, 4))
     time = np.linspace(0, len(output) / fs, num=len(output))
 
-    # Plot waveform in white
-    ax.plot(time, output, color="white", linewidth=1.0)
+    # Plot waveform in black
+    ax.plot(time, output, color="black", linewidth=1.0)
 
-    # Set black background
-    ax.set_facecolor("black")
-    fig.patch.set_facecolor("black")
+    # Set white background
+    ax.set_facecolor("white")
+    fig.patch.set_facecolor("white")
 
-    # Set white bold text with drop shadow
+    # Set black bold text
     font_props = {
         "fontsize": 12,
-        "color": "white",
+        "color": "black",
         "fontweight": "bold"
     }
-    shadow = [pe.withStroke(linewidth=3, foreground="black")]
+    shadow = [pe.withStroke(linewidth=3, foreground="white")]
 
     ax.set_title("Processed Audio Waveform", path_effects=shadow, **font_props)
     ax.set_xlabel("Time [s]", path_effects=shadow, **font_props)
     ax.set_ylabel("Amplitude", path_effects=shadow, **font_props)
 
     # Ticks and grid styling
-    ax.tick_params(colors="white")
+    ax.tick_params(colors="black")
     ax.grid(True, linestyle="--", color="gray", alpha=0.3)
 
     st.pyplot(fig)
-
