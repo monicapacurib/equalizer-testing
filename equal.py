@@ -47,7 +47,7 @@ if uploaded_file is not None:
     st.audio(buf, format='audio/wav')
     st.download_button("Download Processed Audio", buf.getvalue(), file_name="equalized_output.wav")
 
-    # --- Stylized waveform visualization with black background and waveform ---
+    # --- Stylized waveform visualization with black background and white waveform ---
     st.markdown("---")
     st.subheader("📈 Processed Audio Waveform")
 
@@ -55,8 +55,8 @@ if uploaded_file is not None:
 
     time = np.linspace(0, len(output) / fs, num=len(output))
 
-    # Plot waveform in black
-    ax.plot(time, output, color="black", linewidth=1.0)
+    # Plot waveform in white
+    ax.plot(time, output, color="white", linewidth=1.0)
 
     # Set black background
     ax.set_facecolor("black")
