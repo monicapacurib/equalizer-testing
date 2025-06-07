@@ -5,6 +5,7 @@ from scipy.signal import firwin, lfilter
 import io
 import librosa
 import matplotlib.pyplot as plt
+import matplotlib.patheffects as pe
 
 # --- Audio loading function ---
 def load_audio(file):
@@ -47,12 +48,11 @@ if uploaded_file is not None:
     st.audio(buf, format='audio/wav')
     st.download_button("Download Processed Audio", buf.getvalue(), file_name="equalized_output.wav")
 
-    # --- Stylized waveform visualization with black background and white waveform ---
+    # --- Stylized waveform visualization with white waveform and styled text ---
     st.markdown("---")
-    st.subheader("📈 Processed Audio Waveform")
+    st.subheader("📈 Waveform Visualization")
 
     fig, ax = plt.subplots(figsize=(10, 4))
-
     time = np.linspace(0, len(output) / fs, num=len(output))
 
     # Plot waveform in white
@@ -62,13 +62,21 @@ if uploaded_file is not None:
     ax.set_facecolor("black")
     fig.patch.set_facecolor("black")
 
-    # Set axis labels and title in white
-    ax.set_xlabel("Time [s]", fontsize=12, color="white")
-    ax.set_ylabel("Amplitude", fontsize=12, color="white")
-    ax.set_title("🎵 Stylized Audio Waveform", fontsize=14, color="white")
+    # Set white bold text with drop shadow
+    font_props = {
+        "fontsize": 12,
+        "color": "white",
+        "fontweight": "bold"
+    }
+    shadow = [pe.withStroke(linewidth=3, foreground="black")]
 
-    # Set ticks and grid
+    ax.set_title("Processed Audio Waveform", path_effects=shadow, **font_props)
+    ax.set_xlabel("Time [s]", path_effects=shadow, **font_props)
+    ax.set_ylabel("Amplitude", path_effects=shadow, **font_props)
+
+    # Ticks and grid styling
     ax.tick_params(colors="white")
     ax.grid(True, linestyle="--", color="gray", alpha=0.3)
 
     st.pyplot(fig)
+
